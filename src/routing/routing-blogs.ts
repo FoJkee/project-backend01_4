@@ -1,17 +1,16 @@
 import {Response, Request, Router} from "express";
-import {blogsCollection} from "../setting/db";
-import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
 import {repositoryPostsDb} from "../repositories/repository-posts-db";
+import {blogsService} from "../domain/blogs-service";
 
 
 export const routingBlogs = Router()
 
 routingBlogs.get('/', async (req: Request, res: Response) => {
-    const blogsGet = await repositoryBlogsDb.findBlogs()
+    const blogsGet = await blogsService.findBlogs()
     res.status(200).json(blogsGet)
 })
 routingBlogs.post('/', async (req: Request, res: Response) => {
-    const blogsCreate = await repositoryBlogsDb.createBlogs(req.body.name,
+    const blogsCreate = await blogsService.createBlogs(req.body.name,
         req.body.description, req.body.websiteUrl)
     res.status(201).json(blogsCreate)
 })
@@ -41,7 +40,7 @@ routingBlogs.post('/', async (req: Request, res: Response) => {
 })
 
 routingBlogs.get('/:id', async (req: Request, res: Response) => {
-    const blogsGetId = await repositoryBlogsDb.findBlogsId(req.params.id)
+    const blogsGetId = await blogsService.findBlogsId(req.params.id)
     if (blogsGetId) {
         res.status(200).json(blogsGetId)
     } else {
@@ -51,23 +50,23 @@ routingBlogs.get('/:id', async (req: Request, res: Response) => {
 })
 
 routingBlogs.put('/:id', async (req: Request, res: Response) => {
-    const blogsPutId = await repositoryBlogsDb.findBlogsId(req.params.id)
+    const blogsPutId = await blogsService.findBlogsId(req.params.id)
     if (!blogsPutId) {
         res.sendStatus(404)
     } else {
         res.status(204).json(blogsPutId)
     }
-    const blogsPut = await repositoryBlogsDb.updateBlogs(req.params.id,
+    const blogsPut = await blogsService.updateBlogs(req.params.id,
         req.body.name, req.body.description, req.body.websiteUrl)
 
 })
 
 routingBlogs.delete('/:id', async (req: Request, res: Response) => {
-    const blogsDeleteId = await repositoryBlogsDb.findBlogsId(req.params.id)
+    const blogsDeleteId = await blogsService.findBlogsId(req.params.id)
     if (!blogsDeleteId) {
         res.sendStatus(404)
         return
     }
-    const blogsDelete = await repositoryBlogsDb.deleteBlogs(req.params.id)
+    const blogsDelete = await blogsService.deleteBlogs(req.params.id)
 
 })

@@ -1,4 +1,4 @@
-import {BlogsViewType} from "../setting/types";
+import {BlogsType, BlogsViewType} from "../setting/types";
 import {blogsCollection} from "../setting/db";
 import {ObjectId} from "mongodb";
 
@@ -17,15 +17,10 @@ export const repositoryBlogsDb = {
         }))
     },
 
-    async createBlogs(name: string, description: string, websiteUrl: string): Promise<BlogsViewType> {
-        const createBlog = {
-            _id: new ObjectId(),
-            name: name,
-            description: description,
-            websiteUrl: websiteUrl,
-            createdAt: new Date().toISOString(),
-            isMembership: false
-        }
+
+
+    async createBlogs(createBlog: BlogsType): Promise<BlogsViewType> {
+
         const result = await blogsCollection.insertOne(createBlog)
 
         return {
@@ -36,7 +31,6 @@ export const repositoryBlogsDb = {
             createdAt: createBlog.createdAt,
             isMembership: createBlog.isMembership
         }
-
     },
 
     async findBlogsId(id: string): Promise<BlogsViewType | null> {
