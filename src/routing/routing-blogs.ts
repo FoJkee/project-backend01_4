@@ -1,6 +1,7 @@
 import {Response, Request, Router} from "express";
 import {repositoryPostsDb} from "../repositories/repository-posts-db";
 import {blogsService} from "../domain/blogs-service";
+import {postService} from "../domain/post-service";
 
 
 export const routingBlogs = Router()
@@ -15,9 +16,9 @@ routingBlogs.post('/', async (req: Request, res: Response) => {
     res.status(201).json(blogsCreate)
 })
 
-//  todo ?????
+//  todo {id}?????
 routingBlogs.get('/', async (req: Request, res: Response) => {
-    const blogsGetPost = await repositoryPostsDb.findPosts()
+    const blogsGetPost = await postService.findPosts()
     if (blogsGetPost) {
         res.status(200).json(blogsGetPost)
     } else {
@@ -26,9 +27,9 @@ routingBlogs.get('/', async (req: Request, res: Response) => {
 
 })
 
-//  todo ?????
+//  todo {id}?????
 routingBlogs.post('/', async (req: Request, res: Response) => {
-    const blogsCreatePost = await repositoryPostsDb.createPosts(req.body.title,
+    const blogsCreatePost = await postService.createPosts(req.body.title,
         req.body.shortDescription, req.body.content, req.body.blogId, req.body.blogName)
 
     if (blogsCreatePost) {

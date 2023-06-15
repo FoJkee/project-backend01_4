@@ -19,22 +19,9 @@ export const repositoryPostsDb = {
 
         }))
     },
+//Todo any???
+    async createPosts(createPost: any): Promise<PostsViewType> {
 
-    async createPosts(title: string, shortDescription: string, content: string,
-                      blogId: string, blogName: string): Promise<PostsViewType> {
-
-
-
-        const createPost = {
-            _id: new ObjectId(),
-            title: title,
-            shortDescription: shortDescription,
-            content: content,
-            blogId: blogId,
-            blogName: blogName,
-            createdAt: new Date().toISOString()
-
-        }
 
         const result = await postsCollection.insertOne(createPost)
 

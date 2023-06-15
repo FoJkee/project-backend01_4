@@ -12,7 +12,7 @@ export const blogsService = {
     async createBlogs(name: string, description: string, websiteUrl: string): Promise<BlogsType> {
 
         const createBlog = {
-            id: ObjectId,
+            _id: new ObjectId(),
             name: name,
             description: description,
             websiteUrl: websiteUrl,
@@ -20,7 +20,7 @@ export const blogsService = {
             isMembership: false
         }
         return await repositoryBlogsDb.createBlogs(createBlog)
-        return createBlog
+
     },
 
     async findBlogsId(id: string): Promise<BlogsViewType | null> {
@@ -29,16 +29,16 @@ export const blogsService = {
     },
 
     async updateBlogs(id: string, name: string, description: string, websiteUrl: string): Promise<boolean> {
-        return await repositoryBlogsDb.updateBlogs(id , name, description, websiteUrl)
+        return await repositoryBlogsDb.updateBlogs(id, name, description, websiteUrl)
     },
 
     async deleteBlogs(id: string): Promise<boolean> {
-        return  await repositoryBlogsDb.deleteBlogs(id)
+        return await repositoryBlogsDb.deleteBlogs(id)
 
     },
 
     async deleteBlogsAll() {
-        return  await repositoryBlogsDb.deleteBlogsAll()
+        return await repositoryBlogsDb.deleteBlogsAll()
     }
 
 
