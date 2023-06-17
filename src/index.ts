@@ -3,12 +3,12 @@ import bodyParser from "body-parser"
 import {routingBlogs} from "./routing/routing-blogs";
 import {routingTesting} from "./routing/routing-testing";
 import {routingPosts} from "./routing/routing-posts";
-
+import {runDb} from "./setting/db";
 
 
 const app = express()
 
-const port =  4000
+const port = 4000
 const parseMiddleware = express.json()
 
 app.use(bodyParser())
@@ -24,18 +24,14 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!')
 })
 
-//Todo connect bd
-// const starApp = async () => {
-//
-//
-//
-//      await runDb()
-//
-//
-//
-// }
+const startApp = async () => {
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+    await runDb()
+    app.listen(port, () => {
+        console.log(`Example app listening on port ${port}`)
+    })
+
+}
+startApp()
+
 

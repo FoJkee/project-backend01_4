@@ -1,6 +1,8 @@
 import {Router, Request, Response} from "express";
 import {postService} from "../domain/post-service";
 import {postMiddleware} from "../middleware/post-middleware";
+import {authorizeMiddleware} from "../middleware/authorize";
+import {errorsMessages} from "../middleware/errors-messages";
 
 
 export const routingPosts = Router()
@@ -13,7 +15,7 @@ routingPosts.get("/", async (req: Request, res: Response) => {
     res.status(200).json(postGet)
 })
 
-routingPosts.post("/", postMiddleware, async (req: Request, res: Response) => {
+routingPosts.post("/", authorizeMiddleware, postMiddleware, errorsMessages, async (req: Request, res: Response) => {
 
     const postCreate = await postService.createPosts(req.body.title,
         req.body.shortDescription, req.body.content, req.body.blogId, req.body.blogName)
@@ -31,7 +33,7 @@ routingPosts.get("/:id", async (req: Request, res: Response) => {
     }
 })
 
-routingPosts.put("/:id", postMiddleware, async (req: Request, res: Response) => {
+routingPosts.put("/:id",authorizeMiddleware, postMiddleware, errorsMessages, async (req: Request, res: Response) => {
     const postPutId = await postService.findIdPosts(req.params.id)
     if (!postPutId) {
         res.sendStatus(404)
@@ -43,7 +45,7 @@ routingPosts.put("/:id", postMiddleware, async (req: Request, res: Response) => 
 
 })
 
-routingPosts.delete("/:id", postMiddleware, async (req: Request, res: Response) => {
+routingPosts.delete("/:id", authorizeMiddleware, postMiddleware, async (req: Request, res: Response) => {
     const postDeleteId = await postService.findIdPosts(req.params.id)
     if (!postDeleteId) {
         res.sendStatus(404)

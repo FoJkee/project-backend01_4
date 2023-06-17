@@ -1,7 +1,9 @@
 import {Response, Request, Router} from "express";
-import {repositoryPostsDb} from "../repositories/repository-posts-db";
 import {blogsService} from "../domain/blogs-service";
 import {postService} from "../domain/post-service";
+import {authorizeMiddleware} from "../middleware/authorize";
+import {blogsMiddleware} from "../middleware/blogs-middleware";
+import {errorsMessages} from "../middleware/errors-messages";
 
 
 export const routingBlogs = Router()
@@ -10,7 +12,7 @@ routingBlogs.get('/', async (req: Request, res: Response) => {
     const blogsGet = await blogsService.findBlogs()
     res.status(200).json(blogsGet)
 })
-routingBlogs.post('/', async (req: Request, res: Response) => {
+routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages, async (req: Request, res: Response) => {
     const blogsCreate = await blogsService.createBlogs(req.body.name,
         req.body.description, req.body.websiteUrl)
     res.status(201).json(blogsCreate)
@@ -28,7 +30,7 @@ routingBlogs.get('/', async (req: Request, res: Response) => {
 })
 
 //   {id}?????
-routingBlogs.post('/', async (req: Request, res: Response) => {
+routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages, async (req: Request, res: Response) => {
     const blogsCreatePost = await postService.createPosts(req.body.title,
         req.body.shortDescription, req.body.content, req.body.blogId, req.body.blogName)
 
@@ -50,7 +52,7 @@ routingBlogs.get('/:id', async (req: Request, res: Response) => {
 
 })
 
-routingBlogs.put('/:id', async (req: Request, res: Response) => {
+routingBlogs.put('/:id', authorizeMiddleware, blogsMiddleware, errorsMessages, async (req: Request, res: Response) => {
     const blogsPutId = await blogsService.findBlogsId(req.params.id)
     if (!blogsPutId) {
         res.sendStatus(404)
@@ -62,7 +64,7 @@ routingBlogs.put('/:id', async (req: Request, res: Response) => {
 
 })
 
-routingBlogs.delete('/:id', async (req: Request, res: Response) => {
+routingBlogs.delete('/:id', authorizeMiddleware, blogsMiddleware, async (req: Request, res: Response) => {
     const blogsDeleteId = await blogsService.findBlogsId(req.params.id)
     if (!blogsDeleteId) {
         res.sendStatus(404)
