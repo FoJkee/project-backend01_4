@@ -1,6 +1,5 @@
-import {postsCollection} from "../setting/db";
-import {PostsViewType, PostType} from "../setting/types";
-import {ObjectId, WithId} from "mongodb";
+import {PostsViewType} from "../setting/types";
+import {ObjectId} from "mongodb";
 import {repositoryPostsDb} from "../repositories/repository-posts-db";
 
 

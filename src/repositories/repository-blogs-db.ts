@@ -18,7 +18,7 @@ export const repositoryBlogsDb = {
     },
 
 
-// Todo any?
+//  any?
     async createBlogs(createBlog: any): Promise<BlogsViewType> {
 
         const result = await blogsCollection.insertOne(createBlog)

@@ -19,7 +19,7 @@ export const repositoryPostsDb = {
 
         }))
     },
-//Todo any???
+// any???
     async createPosts(createPost: any): Promise<PostsViewType> {
 
 

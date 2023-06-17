@@ -16,7 +16,7 @@ routingBlogs.post('/', async (req: Request, res: Response) => {
     res.status(201).json(blogsCreate)
 })
 
-//  todo {id}?????
+//   {id}?????
 routingBlogs.get('/', async (req: Request, res: Response) => {
     const blogsGetPost = await postService.findPosts()
     if (blogsGetPost) {
@@ -27,7 +27,7 @@ routingBlogs.get('/', async (req: Request, res: Response) => {
 
 })
 
-//  todo {id}?????
+//   {id}?????
 routingBlogs.post('/', async (req: Request, res: Response) => {
     const blogsCreatePost = await postService.createPosts(req.body.title,
         req.body.shortDescription, req.body.content, req.body.blogId, req.body.blogName)
