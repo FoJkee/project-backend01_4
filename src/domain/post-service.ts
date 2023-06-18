@@ -1,4 +1,4 @@
-import {PostsViewType} from "../setting/types";
+import {PostViewType} from "../setting/types";
 import {ObjectId} from "mongodb";
 import {repositoryPostsDb} from "../repositories/repository-posts-db";
 
@@ -6,12 +6,12 @@ import {repositoryPostsDb} from "../repositories/repository-posts-db";
 export const postService = {
 
 
-    async findPosts(): Promise<PostsViewType[]> {
+    async findPosts(): Promise<PostViewType[]> {
         return await repositoryPostsDb.findPosts()
     },
 
     async createPosts(title: string, shortDescription: string, content: string,
-                      blogId: string, blogName: string): Promise<PostsViewType> {
+                      blogId: string, blogName: string): Promise<PostViewType> {
 
         const createPost = {
             _id: new ObjectId(),
@@ -27,14 +27,14 @@ export const postService = {
 
     },
 
-    async findIdPosts(id: string): Promise<PostsViewType | null> {
-        return  await repositoryPostsDb.findIdPosts(id)
+    async findIdPosts(id: string): Promise<PostViewType | null> {
+        return await repositoryPostsDb.findIdPosts(id)
 
 
     },
     async updatePosts(id: string, title: string, shortDescription: string,
                       content: string, blogId: string): Promise<boolean> {
-        return await repositoryPostsDb.updatePosts(id, title,shortDescription,content,blogId)
+        return await repositoryPostsDb.updatePosts(id, title, shortDescription, content, blogId)
 
     },
 
@@ -45,7 +45,7 @@ export const postService = {
     },
 
     async deletePostsAll(): Promise<boolean> {
-        return  await repositoryPostsDb.deletePostsAll()
+        return await repositoryPostsDb.deletePostsAll()
 
     }
 

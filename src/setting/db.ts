@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import {MongoClient, WithId} from "mongodb";
-import {BlogsType, PostType} from "./types";
+import {BlogType, PostType} from "./types";
 
 dotenv.config()
 
@@ -8,17 +8,18 @@ dotenv.config()
 
 const mongoUri = process.env.MONGO_URL || "mongodb://0.0.0.0:27017"
 
+console.log(mongoUri)
+
 if(!mongoUri){
     throw new Error('Not')
 }
-
 
 const client = new MongoClient(mongoUri)
 
 const db = client.db('social_network')
 
 export const postsCollection = db.collection<WithId<PostType>>('posts')
-export const blogsCollection = db.collection<WithId<BlogsType>>('blogs')
+export const blogsCollection = db.collection<WithId<BlogType>>('blogs')
 
 
 export  async function runDb() {

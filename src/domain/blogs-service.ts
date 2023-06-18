@@ -1,15 +1,14 @@
-import {BlogsType, BlogsViewType} from "../setting/types";
+import {BlogViewType} from "../setting/types";
 import {ObjectId} from "mongodb";
 import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
-import {blogsMiddleware} from "../middleware/blogs-middleware";
 
 export const blogsService = {
 
-    async findBlogs(): Promise<BlogsViewType[]> {
+    async findBlogs(): Promise<BlogViewType[]> {
         return repositoryBlogsDb.findBlogs()
     },
 
-    async createBlogs(name: string, description: string, websiteUrl: string): Promise<BlogsType> {
+    async createBlogs(name: string, description: string, websiteUrl: string): Promise<BlogViewType> {
 
         const createBlog = {
             _id: new ObjectId(),
@@ -23,7 +22,7 @@ export const blogsService = {
 
     },
 
-    async findBlogsId(id: string): Promise<BlogsViewType | null> {
+    async findBlogsId(id: string): Promise<BlogViewType | null> {
         return await repositoryBlogsDb.findBlogsId(id)
 
     },

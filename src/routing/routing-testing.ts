@@ -1,13 +1,13 @@
 import {Response, Request, Router} from "express";
-import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
-import {repositoryPostsDb} from "../repositories/repository-posts-db";
+import {blogsService} from "../domain/blogs-service";
+import {postService} from "../domain/post-service";
 
 
 export const routingTesting = Router()
 
 
 routingTesting.delete("/all-data", async (req: Request, res: Response) => {
-    await repositoryBlogsDb.deleteBlogsAll()
-    await repositoryPostsDb.deletePostsAll()
+    await blogsService.deleteBlogsAll()
+    await postService.deletePostsAll()
     res.status(204)
 })

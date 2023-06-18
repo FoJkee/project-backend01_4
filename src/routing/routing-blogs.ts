@@ -4,6 +4,8 @@ import {postService} from "../domain/post-service";
 import {authorizeMiddleware} from "../middleware/authorize";
 import {blogsMiddleware} from "../middleware/blogs-middleware";
 import {errorsMessages} from "../middleware/errors-messages";
+import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
+import {repositoryPostsDb} from "../repositories/repository-posts-db";
 
 
 export const routingBlogs = Router()
@@ -26,6 +28,14 @@ routingBlogs.get('/', async (req: Request, res: Response) => {
     } else {
         res.sendStatus(404)
     }
+    const blogsFindId = await repositoryBlogsDb.findBlogsId(req.params.id)
+
+    if (blogsFindId) {
+        res.status(200).json(repositoryPostsDb.findIdPosts(req.params.id))
+    } else {
+        res.sendStatus(404)
+    }
+
 
 })
 

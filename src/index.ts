@@ -5,7 +5,6 @@ import {routingTesting} from "./routing/routing-testing";
 import {routingPosts} from "./routing/routing-posts";
 import {runDb} from "./setting/db";
 
-
 const app = express()
 
 const port = 4000

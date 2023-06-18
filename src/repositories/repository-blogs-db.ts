@@ -1,11 +1,11 @@
-import {BlogsType, BlogsViewType} from "../setting/types";
+import {BlogType, BlogViewType} from "../setting/types";
 import {blogsCollection} from "../setting/db";
-import {ObjectId} from "mongodb";
+import {ObjectId, WithId} from "mongodb";
 
 
 export const repositoryBlogsDb = {
 
-    async findBlogs(): Promise<BlogsViewType[]> {
+    async findBlogs(): Promise<BlogViewType[]> {
         const result = await blogsCollection.find({}).toArray()
         return result.map(el => ({
             id: el._id.toString(),
@@ -17,9 +17,7 @@ export const repositoryBlogsDb = {
         }))
     },
 
-
-//  any?
-    async createBlogs(createBlog: any): Promise<BlogsViewType> {
+    async createBlogs(createBlog: WithId<BlogType>): Promise<BlogViewType> {
 
         const result = await blogsCollection.insertOne(createBlog)
 
@@ -33,7 +31,9 @@ export const repositoryBlogsDb = {
         }
     },
 
-    async findBlogsId(id: string): Promise<BlogsViewType | null> {
+
+    async findBlogsId(id: string): Promise<BlogViewType | null> {
+
         const blogsGetId = await blogsCollection.findOne({_id: new ObjectId(id)})
 
         if (blogsGetId) {
@@ -50,6 +50,7 @@ export const repositoryBlogsDb = {
             return null
         }
     },
+
 
     async updateBlogs(id: string, name: string, description: string, websiteUrl: string): Promise<boolean> {
 

@@ -1,12 +1,12 @@
 import {postsCollection} from "../setting/db";
-import {PostsViewType, PostType} from "../setting/types";
+import {PostType, PostViewType} from "../setting/types";
 import {ObjectId, WithId} from "mongodb";
 
 
 export const repositoryPostsDb = {
 
 
-    async findPosts(): Promise<PostsViewType[]> {
+    async findPosts(): Promise<PostViewType[]> {
         const result = await postsCollection.find({}).toArray()
         return result.map(el => ({
             id: el._id.toString(),
@@ -20,7 +20,7 @@ export const repositoryPostsDb = {
         }))
     },
 // any???
-    async createPosts(createPost: any): Promise<PostsViewType> {
+    async createPosts(createPost: WithId<PostType>): Promise<PostViewType> {
 
 
         const result = await postsCollection.insertOne(createPost)
@@ -37,7 +37,7 @@ export const repositoryPostsDb = {
 
     },
 
-    async findIdPosts(id: string): Promise<PostsViewType | null> {
+    async findIdPosts(id: string): Promise<PostViewType | null> {
 
         const findGetId: WithId<PostType> | null = await postsCollection.findOne({_id: new ObjectId(id)})
 
