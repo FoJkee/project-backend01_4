@@ -7,7 +7,7 @@ import {runDb} from "./setting/db";
 
 const app = express()
 
-const port = 4000
+const port = 5001
 const parseMiddleware = express.json()
 
 app.use(bodyParser())

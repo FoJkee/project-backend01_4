@@ -9,7 +9,6 @@ export const routingPosts = Router()
 
 
 routingPosts.get("/", async (req: Request, res: Response) => {
-
     const postGet = await postService.findPosts()
 
     res.status(200).json(postGet)

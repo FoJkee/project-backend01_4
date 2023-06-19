@@ -1,10 +1,10 @@
-import {BlogViewType} from "../setting/types";
+import {BlogViewType, PaginatedType} from "../setting/types";
 import {ObjectId} from "mongodb";
 import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
 
 export const blogsService = {
 
-    async findBlogs(): Promise<BlogViewType[]> {
+    async findBlogs(): Promise<PaginatedType<BlogViewType>> {
         return repositoryBlogsDb.findBlogs()
     },
 
@@ -18,6 +18,7 @@ export const blogsService = {
             createdAt: new Date().toISOString(),
             isMembership: false
         }
+
         return await repositoryBlogsDb.createBlogs(createBlog)
 
     },
@@ -31,7 +32,7 @@ export const blogsService = {
         return await repositoryBlogsDb.updateBlogs(id, name, description, websiteUrl)
     },
 
-    async deleteBlogs(id: string): Promise<boolean> {
+    async deleteBlogs(id: string): Promise<boolean | null> {
         return await repositoryBlogsDb.deleteBlogs(id)
 
     },

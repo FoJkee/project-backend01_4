@@ -1,4 +1,4 @@
-import {PostViewType} from "../setting/types";
+import {PaginatedType, PostViewType} from "../setting/types";
 import {ObjectId} from "mongodb";
 import {repositoryPostsDb} from "../repositories/repository-posts-db";
 
@@ -6,7 +6,7 @@ import {repositoryPostsDb} from "../repositories/repository-posts-db";
 export const postService = {
 
 
-    async findPosts(): Promise<PostViewType[]> {
+    async findPosts(): Promise<PaginatedType<PostViewType>> {
         return await repositoryPostsDb.findPosts()
     },
 
@@ -27,6 +27,8 @@ export const postService = {
 
     },
 
+
+
     async findIdPosts(id: string): Promise<PostViewType | null> {
         return await repositoryPostsDb.findIdPosts(id)
 
@@ -44,7 +46,7 @@ export const postService = {
 
     },
 
-    async deletePostsAll(): Promise<boolean> {
+    async deletePostsAll() {
         return await repositoryPostsDb.deletePostsAll()
 
     }

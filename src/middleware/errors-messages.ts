@@ -4,10 +4,10 @@ import {validationResult} from "express-validator";
 
 export const errorsMessages = (req: Request, res: Response, next: NextFunction) => {
 
-    const errMes = ({msg, fields}: any) => {
+    const errMes = ({msg, path}: any) => {
         return {
             message: msg,
-            fields: fields
+            fields: path
         }
     }
     const result = validationResult(req).formatWith(errMes)

@@ -9,5 +9,5 @@ export const routingTesting = Router()
 routingTesting.delete("/all-data", async (req: Request, res: Response) => {
     await blogsService.deleteBlogsAll()
     await postService.deletePostsAll()
-    res.status(204)
+    res.sendStatus(204)
 })

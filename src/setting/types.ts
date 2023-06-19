@@ -1,3 +1,4 @@
+
 export type BlogType = {
     name: string,
     description: string,
@@ -7,9 +8,6 @@ export type BlogType = {
 }
 
 export type BlogViewType = BlogType & { id: string }
-
-
-
 
 
 export type PostType = {
@@ -22,3 +20,15 @@ export type PostType = {
 }
 
 export type PostViewType = PostType & {id: string}
+
+export type PaginatedType<T> = {
+    pagesCount: number,
+    page: number,
+    pageSize: number
+    totalCount: number,
+    items: T[]
+
+}
+
+
+

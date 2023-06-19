@@ -1,14 +1,16 @@
 import {postsCollection} from "../setting/db";
-import {PostType, PostViewType} from "../setting/types";
+import {PaginatedType, PostType, PostViewType} from "../setting/types";
 import {ObjectId, WithId} from "mongodb";
 
 
 export const repositoryPostsDb = {
 
 
-    async findPosts(): Promise<PostViewType[]> {
+    async findPosts(): Promise<PaginatedType<PostViewType>> {
+
         const result = await postsCollection.find({}).toArray()
-        return result.map(el => ({
+
+        const itemsPost: PostViewType[] = result.map(el => ({
             id: el._id.toString(),
             title: el.title,
             shortDescription: el.shortDescription,
@@ -16,10 +18,22 @@ export const repositoryPostsDb = {
             blogId: el.blogId,
             blogName: el.blogName,
             createdAt: el.createdAt
-
         }))
+
+        const response: PaginatedType<PostViewType> = {
+            pagesCount: 1,
+            page: 1,
+            pageSize: 1,
+            totalCount: 10,
+            items: itemsPost
+        }
+
+        return response
+
     },
-// any???
+
+
+
     async createPosts(createPost: WithId<PostType>): Promise<PostViewType> {
 
 
@@ -36,6 +50,9 @@ export const repositoryPostsDb = {
         }
 
     },
+
+
+
 
     async findIdPosts(id: string): Promise<PostViewType | null> {
 
@@ -56,6 +73,10 @@ export const repositoryPostsDb = {
             return null
         }
     },
+
+
+
+
     async updatePosts(id: string, title: string, shortDescription: string,
                       content: string, blogId: string): Promise<boolean> {
 
