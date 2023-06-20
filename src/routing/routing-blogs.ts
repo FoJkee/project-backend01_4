@@ -5,6 +5,7 @@ import {blogsMiddleware} from "../middleware/blogs-middleware";
 import {errorsMessages} from "../middleware/errors-messages";
 import {blogPostMiddleware} from "../middleware/post-middleware";
 import {queryRepositoryBlogs} from "../repositories/query-repository-blogs";
+import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
 
 
 export const routingBlogs = Router()
@@ -15,22 +16,25 @@ routingBlogs.get('/', async (req: Request, res: Response) => {
 })
 routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages,
     async (req: Request, res: Response) => {
-    const blogsCreate = await blogsService.createBlogs(req.body.name,
-        req.body.description, req.body.websiteUrl)
-    res.status(201).json(blogsCreate)
-})
+        const blogsCreate = await blogsService.createBlogs(req.body.name,
+            req.body.description, req.body.websiteUrl)
+        res.status(201).json(blogsCreate)
+    })
 
 
 routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
+    const blogFindForId = await repositoryBlogsDb.findBlogsId(req.params.id)
+    if (!blogFindForId) {
+        res.sendStatus(404)
+        return
+    }
+
     const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.query.pageNumber + '',
         req.query.pageSize + '', req.query.sortDirection + '')
 
-
-
     if (blogsFindPost) {
         res.status(200).json(blogsFindPost)
-    } else {
-        res.sendStatus(404)
+        return
     }
 
 
@@ -38,14 +42,18 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
 
 
 routingBlogs.post('/:id/posts', authorizeMiddleware, blogPostMiddleware, errorsMessages, async (req: Request, res: Response) => {
+    const blogFindForId = await repositoryBlogsDb.findBlogsId(req.params.id)
+    if (!blogFindForId) {
+        res.sendStatus(404)
+        return
+    }
 
     const blogsCreatePost = await queryRepositoryBlogs.createPostForBlog(req.body.title,
         req.body.shortDescription, req.body.content, req.params.id)
 
     if (blogsCreatePost) {
         res.status(201).json(blogsCreatePost)
-    } else {
-        res.sendStatus(404)
+        return
     }
 
 })
