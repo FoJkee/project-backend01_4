@@ -1,4 +1,4 @@
-import {BlogViewType, PaginatedType} from "../setting/types";
+import {BlogViewType} from "../setting/types";
 import {ObjectId} from "mongodb";
 import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
 

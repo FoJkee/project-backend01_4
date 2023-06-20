@@ -7,7 +7,6 @@ export const authorizeMiddleware = async (req: Request, res: Response, next: Nex
 
     if(req.headers.authorization === `Basic ${code}`){
         next()
-
     } else {
         res.sendStatus(401)
     }
