@@ -22,11 +22,14 @@ routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages, asy
 
 routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
     const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.params.pageNumber, req.params.pageSize, req.params.sortDirection)
+
     if (blogsFindPost) {
         res.status(200).json(blogsFindPost)
     } else {
         res.sendStatus(404)
     }
+
+
 })
 
 //
@@ -36,7 +39,7 @@ routingBlogs.post('/:id/posts', authorizeMiddleware, blogPostMiddleware, errorsM
         req.body.shortDescription, req.body.content, req.params.id)
 
     if (blogsCreatePost) {
-        res.status(201).json(blogsCreatePost)
+        res.status(200).json(blogsCreatePost)
     } else {
         res.sendStatus(404)
     }
