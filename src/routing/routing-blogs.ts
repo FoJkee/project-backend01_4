@@ -10,7 +10,7 @@ import {queryRepositoryBlogs} from "../repositories/query-repository-blogs";
 export const routingBlogs = Router()
 
 routingBlogs.get('/', async (req: Request, res: Response) => {
-    const blogsGet = await queryRepositoryBlogs.findBlogs(req.params.pageSize, req.params.pageNumber)
+    const blogsGet = await queryRepositoryBlogs.findBlogs(req.params.pageSize, req.params.pageNumber, req.params.sortDirection)
     res.status(200).json(blogsGet)
 })
 routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages, async (req: Request, res: Response) => {
@@ -21,7 +21,7 @@ routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages, asy
 
 
 routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
-    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.params.pageNumber, req.params.pageSize)
+    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.params.pageNumber, req.params.pageSize, req.params.sortDirection)
     if (blogsFindPost) {
         res.status(200).json(blogsFindPost)
     } else {

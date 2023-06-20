@@ -3,6 +3,10 @@ import {blogsCollection, postsCollection} from "../setting/db";
 import {ObjectId, WithId} from "mongodb";
 
 
+function sortBy(sortDirection: string) {
+    return sortDirection === 'desc' ? -1 : 1
+}
+
 
 function skipp(pageNumber: string, pageSize: string): number {
     return (+pageNumber - 1) * (+pageSize)
@@ -10,11 +14,11 @@ function skipp(pageNumber: string, pageSize: string): number {
 
 export const queryRepositoryBlogs = {
 
-    async findBlogs(pageSize: string, pageNumber: string):
+    async findBlogs(pageSize: string, pageNumber: string, sortDirection: string):
         Promise<PaginatedType<BlogViewType>> {
 
         const result = await blogsCollection.find({})
-            .sort({"createdAt": -1})
+            .sort(sortBy(sortDirection))
             .skip(skipp(pageNumber, pageSize))
             .limit(+pageSize)
             .toArray()
@@ -75,10 +79,10 @@ export const queryRepositoryBlogs = {
     },
 
 
-    async findPostForBlog(pageNumber: string, pageSize: string): Promise<PaginatedType<PostViewType>> {
+    async findPostForBlog(pageNumber: string, pageSize: string, sortDirection: string): Promise<PaginatedType<PostViewType>> {
 
         const result = await postsCollection.find({})
-            .sort({"createdAt": -1})
+            .sort(sortBy(sortDirection))
             .skip(skipp(pageNumber, pageSize))
             .limit(+pageSize)
             .toArray()
@@ -95,7 +99,7 @@ export const queryRepositoryBlogs = {
             createdAt: el.createdAt
 
         }))
-        const pageCount = Math.ceil(+postForBlog.length/ +pageSize)
+        const pageCount = Math.ceil(+postForBlog.length / +pageSize)
 
 
         const response: PaginatedType<PostViewType> = {
@@ -109,13 +113,6 @@ export const queryRepositoryBlogs = {
         return response
 
     },
-
-
-
-
-
-
-
 
 
 }
