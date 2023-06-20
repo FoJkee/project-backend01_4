@@ -29,17 +29,14 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
         return
     }
 
-    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.query.pageNumber + '',
-        req.query.pageSize + '', req.query.sortDirection + '')
+    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.query.pageNumber  + '' || "1",
+        req.query.pageSize + '' || "10", req.query.sortDirection + '' || 'desc', req.query.sortBy + '' || 'createdAt')
 
     if (blogsFindPost) {
         res.status(200).json(blogsFindPost)
         return
     }
-
-
 })
-
 
 routingBlogs.post('/:id/posts', authorizeMiddleware, blogPostMiddleware, errorsMessages, async (req: Request, res: Response) => {
     const blogFindForId = await repositoryBlogsDb.findBlogsId(req.params.id)
