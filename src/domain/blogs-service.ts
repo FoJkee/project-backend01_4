@@ -11,7 +11,7 @@ export const blogsService = {
             name: name,
             description: description,
             websiteUrl: websiteUrl,
-            createdAt: new Date().toISOString(),
+            createdAt: (new Date()).toISOString(),
             isMembership: false
         }
 

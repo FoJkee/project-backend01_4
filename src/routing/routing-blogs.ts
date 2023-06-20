@@ -13,7 +13,8 @@ routingBlogs.get('/', async (req: Request, res: Response) => {
     const blogsGet = await queryRepositoryBlogs.findBlogs(req.params.pageSize, req.params.pageNumber, req.params.sortDirection)
     res.status(200).json(blogsGet)
 })
-routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages, async (req: Request, res: Response) => {
+routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages,
+    async (req: Request, res: Response) => {
     const blogsCreate = await blogsService.createBlogs(req.body.name,
         req.body.description, req.body.websiteUrl)
     res.status(201).json(blogsCreate)
@@ -21,7 +22,10 @@ routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages, asy
 
 
 routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
-    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.params.pageNumber, req.params.pageSize, req.params.sortDirection)
+    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.query.pageNumber + '',
+        req.query.pageSize + '', req.query.sortDirection + '')
+
+
 
     if (blogsFindPost) {
         res.status(200).json(blogsFindPost)
@@ -32,7 +36,7 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
 
 })
 
-//
+
 routingBlogs.post('/:id/posts', authorizeMiddleware, blogPostMiddleware, errorsMessages, async (req: Request, res: Response) => {
 
     const blogsCreatePost = await queryRepositoryBlogs.createPostForBlog(req.body.title,

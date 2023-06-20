@@ -1,4 +1,3 @@
-import * as querystring from "querystring";
 
 export type BlogType = {
     name: string,

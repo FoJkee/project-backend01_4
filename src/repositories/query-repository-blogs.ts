@@ -3,11 +3,6 @@ import {blogsCollection, postsCollection} from "../setting/db";
 import {ObjectId, WithId} from "mongodb";
 
 
-function sortBy(sortDirection: string) {
-    return sortDirection === 'desc' ? 1 : -1
-}
-
-
 function skipp(pageNumber: string, pageSize: string): number {
     return (+pageNumber - 1) * (+pageSize)
 }
