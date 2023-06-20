@@ -1,18 +1,12 @@
 import {BlogViewType, PaginatedType, PostType, PostViewType} from "../setting/types";
 import {blogsCollection, postsCollection} from "../setting/db";
 import {ObjectId, WithId} from "mongodb";
-import * as querystring from "querystring";
 
 
 
 function skipp(pageNumber: string, pageSize: string): number {
-
     return (+pageNumber - 1) * (+pageSize)
 }
-
-// function sort(sortDirection: string) {
-//     return (sortDirection === 'desc') ? -1 : 1
-// }
 
 export const queryRepositoryBlogs = {
 

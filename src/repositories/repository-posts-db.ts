@@ -34,8 +34,8 @@ export const repositoryPostsDb = {
 
         const response: PaginatedType<PostViewType> = {
             pagesCount: pageCount.toString(),
-            page: pageNumber,
-            pageSize: pageSize,
+            page: pageNumber.toString(),
+            pageSize: pageSize.toString(),
             totalCount: itemsPost.length.toString(),
             items: itemsPost
         }

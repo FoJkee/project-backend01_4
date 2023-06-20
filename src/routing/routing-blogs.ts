@@ -3,8 +3,7 @@ import {blogsService} from "../domain/blogs-service";
 import {authorizeMiddleware} from "../middleware/authorize";
 import {blogsMiddleware} from "../middleware/blogs-middleware";
 import {errorsMessages} from "../middleware/errors-messages";
-import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
-import {blogPostMiddleware, postMiddleware} from "../middleware/post-middleware";
+import {blogPostMiddleware} from "../middleware/post-middleware";
 import {queryRepositoryBlogs} from "../repositories/query-repository-blogs";
 
 
