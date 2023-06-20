@@ -4,10 +4,6 @@ import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
 
 export const blogsService = {
 
-    async findBlogs(): Promise<PaginatedType<BlogViewType>> {
-        return repositoryBlogsDb.findBlogs()
-    },
-
     async createBlogs(name: string, description: string, websiteUrl: string): Promise<BlogViewType> {
 
         const createBlog = {

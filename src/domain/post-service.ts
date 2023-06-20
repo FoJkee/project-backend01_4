@@ -6,8 +6,8 @@ import {repositoryPostsDb} from "../repositories/repository-posts-db";
 export const postService = {
 
 
-    async findPosts(): Promise<PaginatedType<PostViewType>> {
-        return await repositoryPostsDb.findPosts()
+    async findPosts(pageNumber: string, pageSize:string): Promise<PaginatedType<PostViewType>> {
+        return await repositoryPostsDb.findPosts(pageNumber, pageSize)
     },
 
     async createPosts(title: string, shortDescription: string, content: string,

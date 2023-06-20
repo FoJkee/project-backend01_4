@@ -5,12 +5,13 @@ import {blogsMiddleware} from "../middleware/blogs-middleware";
 import {errorsMessages} from "../middleware/errors-messages";
 import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
 import {blogPostMiddleware, postMiddleware} from "../middleware/post-middleware";
+import {queryRepositoryBlogs} from "../repositories/query-repository-blogs";
 
 
 export const routingBlogs = Router()
 
 routingBlogs.get('/', async (req: Request, res: Response) => {
-    const blogsGet = await blogsService.findBlogs()
+    const blogsGet = await queryRepositoryBlogs.findBlogs(req.params.pageSize, req.params.pageNumber)
     res.status(200).json(blogsGet)
 })
 routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages, async (req: Request, res: Response) => {
@@ -21,8 +22,8 @@ routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages, asy
 
 
 routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
-    const blogsFindPost = await repositoryBlogsDb.findPostForBlog()
-    if(blogsFindPost) {
+    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.params.pageNumber, req.params.pageSize)
+    if (blogsFindPost) {
         res.status(200).json(blogsFindPost)
     } else {
         res.sendStatus(404)
@@ -32,7 +33,7 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
 //
 routingBlogs.post('/:id/posts', authorizeMiddleware, blogPostMiddleware, errorsMessages, async (req: Request, res: Response) => {
 
-    const blogsCreatePost = await repositoryBlogsDb.createPostForBlog(req.body.title,
+    const blogsCreatePost = await queryRepositoryBlogs.createPostForBlog(req.body.title,
         req.body.shortDescription, req.body.content, req.params.id)
 
     if (blogsCreatePost) {

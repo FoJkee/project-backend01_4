@@ -1,5 +1,5 @@
 import {body} from "express-validator";
-import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
+import {queryRepositoryBlogs} from "../repositories/query-repository-blogs";
 
 
 export const postMiddleware = [
@@ -19,7 +19,7 @@ export const postMiddleware = [
     body('blogId').exists().isString().isLength({min: 1, max: 100})
         .withMessage('Incorrect blogId')
         .custom(async (v, {req}) => {
-            const blogsData = await repositoryBlogsDb.findBlogs()
+            const blogsData = await queryRepositoryBlogs.findBlogs(req.body.pageSize, req.body.pageNumber)
             const blog = blogsData.items.find(b => b.id === v)
             if (!blog) throw new Error()
             req.body.blogName = blog.name

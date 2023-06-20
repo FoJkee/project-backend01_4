@@ -1,3 +1,4 @@
+import * as querystring from "querystring";
 
 export type BlogType = {
     name: string,
@@ -21,11 +22,13 @@ export type PostType = {
 
 export type PostViewType = PostType & {id: string}
 
+
+
 export type PaginatedType<T> = {
-    pagesCount: number,
-    page: number,
-    pageSize: number
-    totalCount: number,
+    pagesCount: string,
+    page: string,
+    pageSize: string
+    totalCount: string,
     items: T[]
 
 }
