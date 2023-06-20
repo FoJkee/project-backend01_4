@@ -39,7 +39,7 @@ routingBlogs.post('/:id/posts', authorizeMiddleware, blogPostMiddleware, errorsM
         req.body.shortDescription, req.body.content, req.params.id)
 
     if (blogsCreatePost) {
-        res.status(200).json(blogsCreatePost)
+        res.status(201).json(blogsCreatePost)
     } else {
         res.sendStatus(404)
     }

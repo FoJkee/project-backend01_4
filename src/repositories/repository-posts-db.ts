@@ -5,9 +5,9 @@ import {ObjectId, WithId} from "mongodb";
 function skipp(pageNumber: number, pageSize: number): number {
     return (+pageNumber - 1) * (+pageSize)
 }
-function sortBy(sortDirection: string) {
-    return sortDirection === 'desc' ? -1 : 1
-}
+// function sortBy(sortDirection: string) {
+//     return sortDirection === 'desc' ? 1 : -1
+// }
 
 export const repositoryPostsDb = {
 
@@ -15,7 +15,7 @@ export const repositoryPostsDb = {
     async findPosts(pageNumber: string, pageSize: string, sortDirection: string): Promise<PaginatedType<PostViewType>> {
 
         const result = await postsCollection.find({})
-            .sort(sortBy(sortDirection))
+            .sort({"createdAt": 1})
             .skip(skipp(+pageNumber, +pageSize))
             .limit(+pageSize)
             .toArray()

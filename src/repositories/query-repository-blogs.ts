@@ -4,7 +4,7 @@ import {ObjectId, WithId} from "mongodb";
 
 
 function sortBy(sortDirection: string) {
-    return sortDirection === 'desc' ? -1 : 1
+    return sortDirection === 'desc' ? 1 : -1
 }
 
 
@@ -18,7 +18,7 @@ export const queryRepositoryBlogs = {
         Promise<PaginatedType<BlogViewType>> {
 
         const result = await blogsCollection.find({})
-            .sort(sortBy(sortDirection))
+            .sort({"createdAt": 1})
             .skip(skipp(pageNumber, pageSize))
             .limit(+pageSize)
             .toArray()
@@ -82,7 +82,7 @@ export const queryRepositoryBlogs = {
     async findPostForBlog(pageNumber: string, pageSize: string, sortDirection: string): Promise<PaginatedType<PostViewType>> {
 
         const result = await postsCollection.find({})
-            .sort(sortBy(sortDirection))
+            .sort({"createdAt": 1})
             .skip(skipp(pageNumber, pageSize))
             .limit(+pageSize)
             .toArray()
