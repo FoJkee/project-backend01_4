@@ -32,8 +32,8 @@ export const repositoryBlogsDb = {
                 name: blogsGetId.name,
                 description: blogsGetId.description,
                 websiteUrl: blogsGetId.websiteUrl,
-                createdAt: new Date().toString(),
-                isMembership: false
+                createdAt: blogsGetId.createdAt,
+                isMembership: blogsGetId.isMembership
             }
         } else {
 
