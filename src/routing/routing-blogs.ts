@@ -12,20 +12,25 @@ export const routingBlogs = Router()
 
 routingBlogs.get('/', async (req: Request, res: Response) => {
     const blogsGet = await queryRepositoryBlogs.findBlogs(
-
         req.query.pageSize + '' || "10",
         req.query.pageNumber + '' || '1',
         req.query.sortDirection + '' || "desc",
         req.query.sortBy + '' || "createdAt",
-
     )
     res.status(200).json(blogsGet)
 })
+
+
 routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages,
     async (req: Request, res: Response) => {
-        const blogsCreate = await blogsService.createBlogs(req.body.name,
-            req.body.description, req.body.websiteUrl)
+
+        const blogsCreate = await blogsService.createBlogs(
+            req.body.name,
+            req.body.description,
+            req.body.websiteUrl
+        )
         res.status(201).json(blogsCreate)
+
     })
 
 
@@ -76,6 +81,7 @@ routingBlogs.get('/:id', async (req: Request, res: Response) => {
     }
 
 })
+
 
 routingBlogs.put('/:id', authorizeMiddleware, blogsMiddleware, errorsMessages, async (req: Request, res: Response) => {
     const blogsPutId = await blogsService.findBlogsId(req.params.id)
