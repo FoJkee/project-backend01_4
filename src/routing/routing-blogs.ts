@@ -12,10 +12,11 @@ export const routingBlogs = Router()
 
 routingBlogs.get('/', async (req: Request, res: Response) => {
     const blogsGet = await queryRepositoryBlogs.findBlogs(
-        req.query.pageSize + '' || "10",
+        req.query.pageSize = '' || "10",
         req.query.pageNumber + '' || '1',
         req.query.sortDirection + '' || "desc",
         req.query.sortBy + '' || "createdAt",
+        req.query.searchNameTerm + '' || "null"
     )
     res.status(200).json(blogsGet)
 })

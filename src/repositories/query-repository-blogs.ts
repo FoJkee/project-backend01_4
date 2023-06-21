@@ -3,18 +3,21 @@ import {blogsCollection, postsCollection} from "../setting/db";
 import {ObjectId, WithId} from "mongodb";
 
 
-function skipp(pageNumber: number, pageSize: number) {
-    return (pageNumber - 1) * (pageSize)
-}
+// function skipp(pageNumber: number, pageSize: number) {
+//     return (pageNumber - 1) * (pageSize)
+// }
 
 export const queryRepositoryBlogs = {
 
-    async findBlogs(pageSize: string, pageNumber: string, sortDirection: string, sortBy: string):
+    async findBlogs(pageSize: string, pageNumber: string, sortDirection: string, sortBy: string, searchNameTerm: string):
         Promise<PaginatedType<BlogViewType>> {
 
-        const result = await blogsCollection.find({})
+
+
+        const result = await blogsCollection
+            .find({searchNameTerm})
             .sort({[sortBy]: sortDirection === "desc" ? 1 : -1})
-            .skip(skipp(+pageNumber, +pageSize))
+            .skip((+pageSize) * (+pageNumber - 1))
             .limit(+pageSize)
             .toArray()
 
@@ -80,7 +83,7 @@ export const queryRepositoryBlogs = {
 
         const result = await postsCollection.find({})
             .sort({[sortBy]: sortDirection === "desc" ? 1 : -1})
-            .skip(skipp(+pageNumber, +pageSize))
+            .skip(+pageSize * (+pageNumber - 1))
             .limit(+pageSize)
             .toArray()
 
