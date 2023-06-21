@@ -97,5 +97,5 @@ routingBlogs.delete('/:id', authorizeMiddleware, blogsMiddleware, async (req: Re
     }
 
     const blogsDelete = await blogsService.deleteBlogs(req.params.id)
-    res.sendStatus(201)
+    res.sendStatus(204)
 })
