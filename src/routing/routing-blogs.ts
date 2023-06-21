@@ -1,4 +1,4 @@
-import {Response, Request, Router} from "express";
+import {Response, Request, Router, query} from "express";
 import {blogsService} from "../domain/blogs-service";
 import {authorizeMiddleware} from "../middleware/authorize";
 import {blogsMiddleware} from "../middleware/blogs-middleware";
@@ -8,15 +8,47 @@ import {queryRepositoryBlogs} from "../repositories/query-repository-blogs";
 import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
 
 
+
+type PaginatorPayloadType = {
+    pageSize: number,
+    pageNumber?: number
+    sortDirection?: string
+    sortBy?: string
+}
+
+type PaginatorResponseType = {
+    pageSize: number
+    pageNumber: number
+    sortDirection: string,
+    sortBy: string
+}
+
+
+const paginator = (query: PaginatorPayloadType): PaginatorResponseType => {
+
+    const pageSize = !isNaN(Number(query.pageSize)) ? Number(query.pageSize) : 10
+    const  pageNumber = !isNaN(Number(query.pageNumber)) ? Number(query.pageNumber) : 1
+    const sortDirection = query.sortDirection ? 'desc' : 'asc'
+    const sortBy = query.sortBy ? 'createdAt' : ''
+
+
+    return  {
+        pageSize: query.pageSize ? Number(query.pageSize) : 10,
+        pageNumber: query.pageNumber ? Number(query.pageSize) : 1,
+        sortDirection: query.sortDirection ? query.sortDirection : 'desc',
+        sortBy: query.sortBy ? query.sortBy : 'createdAt'
+    }
+}
+
 export const routingBlogs = Router()
 
 routingBlogs.get('/', async (req: Request, res: Response) => {
+
     const blogsGet = await queryRepositoryBlogs.findBlogs(
-        req.query.pageSize = '' || "10",
-        req.query.pageNumber + '' || '1',
-        req.query.sortDirection + '' || "desc",
-        req.query.sortBy + '' || "createdAt",
-        req.query.searchNameTerm + '' || "null"
+        req.query.pageSize,
+        req.query.pageNumber,
+        req.query.sortDirection,
+        req.query.sortBy
     )
     res.status(200).json(blogsGet)
 })
@@ -43,7 +75,8 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
     }
 
     const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(
-        req.query.pageNumber + "" || "1",
+
+        req.query.pageNumber + '' || "1",
         req.query.pageSize + '' || "10",
         req.query.sortDirection + '' || 'desc',
         req.query.sortBy + '' || 'createdAt'

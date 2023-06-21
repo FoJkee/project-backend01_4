@@ -9,12 +9,12 @@ import {ObjectId, WithId} from "mongodb";
 export const repositoryPostsDb = {
 
 
-    async findPosts(pageNumber: string, pageSize: string, sortDirection: string, sortBy: string): Promise<PaginatedType<PostViewType>> {
+    async findPosts(pageNumber: number, pageSize: number, sortDirection: string, sortBy: string): Promise<PaginatedType<PostViewType>> {
 
         const result = await postsCollection.find({})
             .sort({[sortBy]: sortDirection === 'desc' ? 1 : -1})
-            .skip(+pageSize * (+pageNumber - 1))
-            .limit(+pageSize)
+            .skip(pageSize * (pageNumber - 1))
+            .limit(pageSize)
             .toArray()
 
 
@@ -30,14 +30,14 @@ export const repositoryPostsDb = {
 
         const totalCount: number = await postsCollection.countDocuments()
 
-        const pageCount: number = Math.ceil(totalCount / +pageSize)
+        const pageCount: number = Math.ceil(totalCount / pageSize)
 
 
         const response: PaginatedType<PostViewType> = {
             pagesCount: pageCount,
-            page: +pageNumber,
-            pageSize: +pageSize,
-            totalCount: +totalCount,
+            page: pageNumber,
+            pageSize: pageSize,
+            totalCount: totalCount,
             items: itemsPost
         }
 

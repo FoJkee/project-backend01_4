@@ -10,7 +10,7 @@ export const errorsMessages = (req: Request, res: Response, next: NextFunction) 
 
         return {
             message: msg,
-            fields: path
+            field: path
         }
     }
 
