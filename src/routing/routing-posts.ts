@@ -9,7 +9,12 @@ export const routingPosts = Router()
 
 
 routingPosts.get("/", async (req: Request, res: Response) => {
-    const postGet = await postService.findPosts(req.params.pageNumber, req.params.pageSize, req.params.sortDirection)
+    const postGet = await postService.findPosts(
+        req.query.pageNumber + '' || '1',
+        req.query.pageSize + '' || "10",
+        req.query.sortDirection + '' || 'desc',
+        req.query.sortBy + '' || 'createdAt'
+    )
 
     res.status(200).json(postGet)
 })
@@ -32,7 +37,7 @@ routingPosts.get("/:id", async (req: Request, res: Response) => {
     }
 })
 
-routingPosts.put("/:id",authorizeMiddleware, postMiddleware, errorsMessages, async (req: Request, res: Response) => {
+routingPosts.put("/:id", authorizeMiddleware, postMiddleware, errorsMessages, async (req: Request, res: Response) => {
     const postPutId = await postService.findIdPosts(req.params.id)
     if (!postPutId) {
         res.sendStatus(404)

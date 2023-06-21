@@ -24,10 +24,10 @@ export type PostViewType = PostType & {id: string}
 
 
 export type PaginatedType<T> = {
-    pagesCount: string,
-    page: string,
-    pageSize: string
-    totalCount: string,
+    pagesCount: number,
+    page: number,
+    pageSize: number
+    totalCount: number,
     items: T[]
 
 }

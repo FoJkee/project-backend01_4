@@ -19,7 +19,8 @@ export const postMiddleware = [
     body('blogId').exists().isString().isLength({min: 1, max: 100})
         .withMessage('Incorrect blogId')
         .custom(async (v, {req}) => {
-            const blogsData = await queryRepositoryBlogs.findBlogs(req.body.pageSize, req.body.pageNumber, req.body.sortDirection)
+            const blogsData = await queryRepositoryBlogs.findBlogs(
+                req.body.pageSize, req.body.pageNumber, req.body.sortDirection, req.body.sortBy)
             const blog = blogsData.items.find(b => b.id === v)
             if (!blog) throw new Error()
             req.body.blogName = blog.name

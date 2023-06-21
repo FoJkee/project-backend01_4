@@ -11,7 +11,14 @@ import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
 export const routingBlogs = Router()
 
 routingBlogs.get('/', async (req: Request, res: Response) => {
-    const blogsGet = await queryRepositoryBlogs.findBlogs(req.params.pageSize, req.params.pageNumber, req.params.sortDirection)
+    const blogsGet = await queryRepositoryBlogs.findBlogs(
+
+        req.query.pageSize + '' || "10",
+        req.query.pageNumber + '' || '1',
+        req.query.sortDirection + '' || "desc",
+        req.query.sortBy + '' || "createdAt",
+
+    )
     res.status(200).json(blogsGet)
 })
 routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages,
@@ -29,8 +36,12 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
         return
     }
 
-    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(req.query.pageNumber  + '' || "1",
-        req.query.pageSize + '' || "10", req.query.sortDirection + '' || 'desc', req.query.sortBy + '' || 'createdAt')
+    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(
+        req.query.pageNumber + "" || "1",
+        req.query.pageSize + '' || "10",
+        req.query.sortDirection + '' || 'desc',
+        req.query.sortBy + '' || 'createdAt'
+    )
 
     if (blogsFindPost) {
         res.status(200).json(blogsFindPost)

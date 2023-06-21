@@ -3,17 +3,17 @@ import {PaginatedType, PostType, PostViewType} from "../setting/types";
 import {ObjectId, WithId} from "mongodb";
 
 function skipp(pageNumber: number, pageSize: number): number {
-    return (+pageNumber - 1) * (+pageSize)
+    return (pageNumber - 1) * (pageSize)
 }
 
 
 export const repositoryPostsDb = {
 
 
-    async findPosts(pageNumber: string, pageSize: string, sortDirection: string): Promise<PaginatedType<PostViewType>> {
+    async findPosts(pageNumber: string, pageSize: string, sortDirection: string, sortBy: string): Promise<PaginatedType<PostViewType>> {
 
         const result = await postsCollection.find({})
-            .sort({"createdAt": 1})
+            .sort({[sortBy]: sortDirection === 'desc' ? 1 : -1})
             .skip(skipp(+pageNumber, +pageSize))
             .limit(+pageSize)
             .toArray()
@@ -28,15 +28,16 @@ export const repositoryPostsDb = {
             blogName: el.blogName,
             createdAt: el.createdAt
         }))
+        const totalCount = await postsCollection.countDocuments()
 
-        const pageCount = Math.ceil(+itemsPost.length / +pageSize)
+        const pageCount = Math.ceil(totalCount / +pageSize)
 
 
         const response: PaginatedType<PostViewType> = {
-            pagesCount: pageCount.toString(),
-            page: pageNumber.toString(),
-            pageSize: pageSize.toString(),
-            totalCount: itemsPost.length.toString(),
+            pagesCount: pageCount,
+            page: +pageNumber,
+            pageSize: +pageSize,
+            totalCount: totalCount,
             items: itemsPost
         }
 
