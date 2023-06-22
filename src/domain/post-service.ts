@@ -1,4 +1,4 @@
-import {PaginatedType, PostViewType} from "../setting/types";
+import {PaginatedType, Pagination, PostViewType} from "../setting/types";
 import {ObjectId} from "mongodb";
 import {repositoryPostsDb} from "../repositories/repository-posts-db";
 
@@ -6,8 +6,8 @@ import {repositoryPostsDb} from "../repositories/repository-posts-db";
 export const postService = {
 
 
-    async findPosts(pageNumber: string, pageSize: string, sortDirection: string, sortBy: string): Promise<PaginatedType<PostViewType>> {
-        return await repositoryPostsDb.findPosts(pageNumber, pageSize, sortDirection, sortBy)
+    async findPosts(paginator: Pagination): Promise<PaginatedType<PostViewType>> {
+        return await repositoryPostsDb.findPosts(paginator)
     },
 
     async createPosts(title: string, shortDescription: string, content: string,

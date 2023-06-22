@@ -1,21 +1,30 @@
-import {BlogViewType, PaginatedType, PostType, PostViewType} from "../setting/types";
+import {
+    BlogType,
+    BlogViewType,
+    PaginatedType,
+    Pagination,
+    PaginationView,
+    PostType,
+    PostViewType
+} from "../setting/types";
 import {blogsCollection, postsCollection} from "../setting/db";
-import {ObjectId, WithId} from "mongodb";
+import {Filter, ObjectId, WithId} from "mongodb";
 
 
 
 export const queryRepositoryBlogs = {
 
-    async findBlogs(pageSize: number, pageNumber: number, sortDirection: string, sortBy: string):
+    async findBlogs(pagination: PaginationView):
         Promise<PaginatedType<BlogViewType>> {
 
+        const filter: Filter<BlogType> = {name: {$regex: pagination.searchNameTerm ?? '', $options: 'i'}}
 
 
         const result = await blogsCollection
-            .find()
-            .sort({[sortBy]: sortDirection === "desc" ? 1 : -1})
-            .skip((pageSize) * (pageNumber - 1))
-            .limit(pageSize)
+            .find(filter)
+            .sort({[pagination.sortBy]: pagination.sortDirection === "desc" ? 1 : -1})
+            .skip((pagination.pageSize) * (pagination.pageNumber - 1))
+            .limit(pagination.pageSize)
             .toArray()
 
         const itemsBlog: BlogViewType[] = result.map(el => ({
@@ -27,15 +36,15 @@ export const queryRepositoryBlogs = {
             isMembership: el.isMembership
         }))
 
-        const totalCount = await blogsCollection.countDocuments()
+        const totalCount = await blogsCollection.countDocuments(filter)
 
-        const pageCount = Math.ceil(totalCount / pageSize)
+        const pageCount = Math.ceil(totalCount / pagination.pageSize)
 
 
         const response: PaginatedType<BlogViewType> = {
             pagesCount: pageCount,
-            page: pageNumber,
-            pageSize: pageSize,
+            page: pagination.pageNumber,
+            pageSize: pagination.pageSize,
             totalCount: totalCount,
             items: itemsBlog
         }
@@ -76,13 +85,13 @@ export const queryRepositoryBlogs = {
     },
 
 
-    async findPostForBlog(pageNumber: number, pageSize: number, sortDirection: string, sortBy: string): Promise<PaginatedType<PostViewType>> {
+    async findPostForBlog(pagination: Pagination): Promise<PaginatedType<PostViewType>> {
 
         const result = await postsCollection
             .find({})
-            .sort({[sortBy]: sortDirection === "desc" ? 1 : -1})
-            .skip(pageSize * (pageNumber - 1))
-            .limit(pageSize)
+            .sort({[pagination.sortBy]: pagination.sortDirection === "desc" ? 1 : -1})
+            .skip(pagination.pageSize * (pagination.pageNumber - 1))
+            .limit(pagination.pageSize)
             .toArray()
 
 
@@ -100,13 +109,13 @@ export const queryRepositoryBlogs = {
         const totalCount = await postsCollection.countDocuments()
 
 
-        const pageCount = Math.ceil(totalCount / pageSize)
+        const pageCount = Math.ceil(totalCount / pagination.pageSize)
 
 
         const response: PaginatedType<PostViewType> = {
             pagesCount: pageCount,
-            page: pageNumber,
-            pageSize: pageSize,
+            page: pagination.pageNumber,
+            pageSize: pagination.pageSize,
             totalCount: totalCount,
             items: postForBlog
         }

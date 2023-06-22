@@ -3,18 +3,15 @@ import {postService} from "../domain/post-service";
 import {postMiddleware} from "../middleware/post-middleware";
 import {authorizeMiddleware} from "../middleware/authorize";
 import {errorsMessages} from "../middleware/errors-messages";
+import {paginator2} from "./routing-blogs";
 
 
 export const routingPosts = Router()
 
 
 routingPosts.get("/", async (req: Request, res: Response) => {
-    const postGet = await postService.findPosts(
-        req.query.pageNumber + '' || '1',
-        req.query.pageSize + '' || "10",
-        req.query.sortDirection + '' || 'desc',
-        req.query.sortBy + '' || 'createdAt'
-    )
+
+    const postGet = await postService.findPosts(paginator2(req.query))
 
     res.status(200).json(postGet)
 })

@@ -29,8 +29,15 @@ export type PaginatedType<T> = {
     pageSize: number
     totalCount: number,
     items: T[]
-
 }
 
+export type Pagination = {
+    pageNumber : number,
+    pageSize: number,
+    sortDirection: string,
+    sortBy: string
+}
+
+export type PaginationView = Pagination & {searchNameTerm : string}
 
 
