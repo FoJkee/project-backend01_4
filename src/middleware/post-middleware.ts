@@ -1,7 +1,4 @@
 import {body} from "express-validator";
-import {queryRepositoryBlogs} from "../repositories/query-repository-blogs";
-import {paginatorBlogs} from "../routing/routing-blogs";
-import {SearchQueryView} from "../setting/types";
 import {blogsService} from "../domain/blogs-service";
 
 

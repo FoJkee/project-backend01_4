@@ -17,39 +17,3 @@ export const blogsMiddleware = [
     }).withMessage("String length is not more than 100 symbols").matches(pattern).withMessage('Incorrect websiteUrl')
 
 ]
-
-export const blogsMiddlewareA = [
-    query('pageNumber').optional().isInt().default(10).custom((val, {req}) => {
-        if (val <= 0) {
-            req.query!.pageNumber = 10
-            return true
-        }
-        return true
-    }),
-
-    query('pageSize').optional().isInt().default(1).custom((val, {req}) => {
-        if (val <= 0) {
-            req.query!.pageSize = 1
-            return true
-        }
-        return true
-
-    }),
-    query('sortDirection').optional().isString().default('desc').custom((val, {req}) => {
-        if (val === 'desc') {
-            req.query!.sortDirection = 1
-            return true
-        }
-
-        return true
-    }),
-    query('sortBy').optional().isString().default('createdAt').custom((val, {req}) => {
-
-        if (val === 'createdAt') {
-            req.query!.sortBy = 'createdAt'
-            return true
-        }
-        return true
-    })
-
-]
