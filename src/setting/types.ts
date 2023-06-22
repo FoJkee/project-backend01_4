@@ -31,13 +31,22 @@ export type PaginatedType<T> = {
     items: T[]
 }
 
+export type SearchQuery = {
+    pageNumber?: number,
+    pageSize?: number,
+    sortDirection?: string,
+    sortBy?: string
+}
+
+export type SearchQueryView = Pagination & {searchNameTerm? : string | null}
+
 export type Pagination = {
-    pageNumber : number,
+    pageNumber: number,
     pageSize: number,
     sortDirection: string,
     sortBy: string
 }
 
-export type PaginationView = Pagination & {searchNameTerm : string}
+export type PaginationView = Pagination & {searchNameTerm : string | null}
 
 

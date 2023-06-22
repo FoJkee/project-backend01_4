@@ -1,4 +1,4 @@
-import {Response, Request, Router, query} from "express";
+import {Response, Request, Router, query, NextFunction} from "express";
 import {blogsService} from "../domain/blogs-service";
 import {authorizeMiddleware} from "../middleware/authorize";
 import {blogsMiddleware, blogsMiddlewareA} from "../middleware/blogs-middleware";
@@ -6,6 +6,7 @@ import {errorsMessages} from "../middleware/errors-messages";
 import {blogPostMiddleware} from "../middleware/post-middleware";
 import {queryRepositoryBlogs} from "../repositories/query-repository-blogs";
 import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
+import {Pagination, PaginationView, SearchQuery, SearchQueryView} from "../setting/types";
 
 
 // const paginator3 = (query: any) => {
@@ -18,61 +19,79 @@ import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
 // }
 
 
-export const paginator2 = (query: any) => {
+// export const paginator2 = (query: any) => {
+//
+//     const defaultValues = {
+//
+//         pageSize: 10,
+//         pageNumber: 1,
+//         sortDirection: 'desc',
+//         sortBy: 'createdAt'
+//     }
+//
+//
+//         const pageSize = parseInt(query.pageSize, 10)
+//         const pageNumber = parseInt(query.pageNumber, 10)
+//         const sortDirection = query.sortDirection ? 'desc' : 'asc'
+//         const sortBy = query.sortBy ? 'createdAt' : ''
+//         if (!pageSize) defaultValues.pageSize = defaultValues.pageSize
+//         if (isNaN(pageSize)) defaultValues.pageSize = defaultValues.pageSize
+//         if (pageSize <= 0) defaultValues.pageSize = defaultValues.pageSize
+//
+//         if (!pageNumber) defaultValues.pageNumber = pageNumber
+//         if (isNaN(pageNumber)) defaultValues.pageNumber = defaultValues.pageNumber
+//         if (pageNumber <= 0) defaultValues.pageNumber = defaultValues.pageNumber
+//
+//
+//         defaultValues.pageSize = pageSize
+//         defaultValues.pageNumber = pageNumber
+//         defaultValues.sortDirection = sortDirection
+//         defaultValues.sortBy = sortBy
+//
+//
+//     return query.pageSize, query.pageNumber, query.sortDirection, query.sortBy
+//
+// }
 
-    const defaultValues = {
 
-        pageSize: 10,
-        pageNumber: 1,
-        sortDirection: 'desc',
-        sortBy: 'createdAt'
+export const paginatorBlogs = (query: SearchQueryView): PaginationView => {
+
+    return {
+        pageSize: query.pageSize ?? 10,
+        pageNumber: query.pageNumber ?? 1,
+        sortDirection: query.sortDirection ?? 'desc',
+        sortBy: query.sortBy ?? 'createdAt',
+        searchNameTerm: query.searchNameTerm ?? null
     }
-
-    if (query.pageSize) {
-        const pageSize = parseInt(query.pageSize, 10)
-        const pageNumber = parseInt(query.pageNumber, 10)
-        const sortDirection = query.sortDirection ? 'desc' : 'asc'
-        const sortBy = query.sortBy ? 'createdAt' : ''
-        if (!pageSize) defaultValues.pageSize = defaultValues.pageSize
-        if (isNaN(pageSize)) defaultValues.pageSize = defaultValues.pageSize
-        if (pageSize <= 0) defaultValues.pageSize = defaultValues.pageSize
-
-        if (!pageNumber) defaultValues.pageNumber = pageNumber
-        if (isNaN(pageNumber)) defaultValues.pageNumber = defaultValues.pageNumber
-        if (pageNumber <= 0) defaultValues.pageNumber = defaultValues.pageNumber
-
-
-        defaultValues.pageSize = pageSize
-        defaultValues.pageNumber = pageNumber
-        defaultValues.sortDirection = sortDirection
-        defaultValues.sortBy = sortBy
-    }
-
-    return query.pageSize, query.pageNumber, query.sortDirection, query.sortBy
-
 }
 
+export const paginatorPost = (query: SearchQuery): Pagination => {
 
-// const paginator = (query: PaginatorPayloadType): PaginatorResponseType => {
+    return {
+        pageSize: query.pageSize ?? 10,
+        pageNumber: query.pageNumber ?? 1,
+        sortDirection: query.sortDirection ?? 'desc',
+        sortBy: query.sortBy ?? 'createdAt',
+    }
+}
+
+// const blogsQuery = (req: Request, res: Response, next: NextFunction) => {
+//     const pagination = paginator(req.query)
 //
-//     const pageSize = !isNaN(Number(query.pageSize)) ? Number(query.pageSize) : 10
-//     const  pageNumber = !isNaN(Number(query.pageNumber)) ? Number(query.pageNumber) : 1
-//     const sortDirection = query.sortDirection ? 'desc' : 'asc'
-//     const sortBy = query.sortBy ? 'createdAt' : ''
+//     Object.keys(pagination).map(el => [
+//         req.query[el] = pagination[el]
+//     ])
 //
-//
-//     return  {
-//         pageSize: query.pageSize ? Number(query.pageSize) : 10,
-//         pageNumber: query.pageNumber ? Number(query.pageSize) : 1,
-//         sortDirection: query.sortDirection ? query.sortDirection : 'desc',
-//         sortBy: query.sortBy ? query.sortBy : 'createdAt'
-//     }
+//     next()
 // }
+
+
 
 export const routingBlogs = Router()
 
-routingBlogs.get('/', async (req: Request, res: Response) => {
-    const pagination = paginator2(req.query)
+routingBlogs.get('/', async (req: Request<{},{},{}, SearchQueryView>, res: Response) => {
+    const pagination = paginatorBlogs(req.query)
+
     const blogsGet = await queryRepositoryBlogs.findBlogs(pagination)
     res.status(200).json(blogsGet)
 })
@@ -97,7 +116,7 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
         res.sendStatus(404)
         return
     }
-    const pagination = paginator2(req.query)
+    const pagination = paginatorPost(req.query)
 
     const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(pagination)
 
