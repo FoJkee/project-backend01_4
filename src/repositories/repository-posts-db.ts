@@ -10,10 +10,9 @@ export const repositoryPostsDb = {
     async findPosts(pagination: Pagination): Promise<PaginatedType<PostViewType>> {
 
 
-
         const result = await postsCollection
             .find({})
-            .sort({[pagination.sortBy]: pagination.sortDirection === 'desc' ? -1 : 1})
+            .sort({[pagination.sortBy]: pagination.sortDirection === 'desc' ? 1 : -1})
             .skip(pagination.pageSize * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
