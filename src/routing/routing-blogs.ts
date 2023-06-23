@@ -41,6 +41,9 @@ export const paginatorPost = (query: SearchQuery): Pagination => {
 // }
 
 
+
+
+
 export const routingBlogs = Router()
 
 routingBlogs.get('/', async (req: Request<{}, {}, {}, SearchQueryView>, res: Response) => {

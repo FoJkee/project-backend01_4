@@ -12,6 +12,7 @@ import {Filter, ObjectId, WithId} from "mongodb";
 
 
 
+
 export const queryRepositoryBlogs = {
 
     async findBlogs(pagination: PaginationView):
@@ -22,10 +23,11 @@ export const queryRepositoryBlogs = {
 
         const result = await blogsCollection
             .find(filter)
-            .sort({[pagination.sortBy]: pagination.sortDirection === "desc" ? 1 : -1})
+            .sort({[pagination.sortBy]: pagination.sortDirection === "asc" ? 1 : -1})
             .skip((pagination.pageSize) * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
+        console.log("pagination.sortBy", pagination.sortBy)
 
         const itemsBlog: BlogViewType[] = result.map(el => ({
             id: el._id.toString(),
@@ -91,12 +93,10 @@ export const queryRepositoryBlogs = {
 
         const result = await postsCollection
             .find(filter)
-            .sort({[pagination.sortBy]: pagination.sortDirection === "desc" ? 1 : -1})
+            .sort({[pagination.sortBy]: pagination.sortDirection === "asc" ? 1 : -1})
             .skip(pagination.pageSize * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
-
-
 
 
         const postForBlog: PostViewType[] = result.map(el => ({
