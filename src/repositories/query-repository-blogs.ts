@@ -9,6 +9,7 @@ import {
 } from "../setting/types";
 import {blogsCollection, postsCollection} from "../setting/db";
 import {Filter, ObjectId, WithId} from "mongodb";
+import {paginatorBlogs} from "../routing/routing-blogs";
 
 
 
@@ -23,12 +24,11 @@ export const queryRepositoryBlogs = {
 
         const result = await blogsCollection
             .find(filter)
-            // .sort({[pagination.sortBy]: pagination.sortDirection === "asc" ? 1 : -1})
-            .sort({"createdAt": -1})
+            .sort({[pagination.sortBy]: -1})
             .skip((pagination.pageSize) * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
-        console.log("pagination.sortBy", pagination.sortBy)
+
 
         const itemsBlog: BlogViewType[] = result.map(el => ({
             id: el._id.toString(),
@@ -94,8 +94,7 @@ export const queryRepositoryBlogs = {
 
         const result = await postsCollection
             .find(filter)
-            // .sort({[pagination.sortBy]: pagination.sortDirection === "asc" ? 1 : -1})
-            .sort({"createdAt": -1})
+            .sort({[pagination.sortBy]: -1})
             .skip(pagination.pageSize * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
