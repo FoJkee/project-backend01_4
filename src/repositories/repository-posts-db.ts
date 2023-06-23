@@ -12,7 +12,8 @@ export const repositoryPostsDb = {
 
         const result = await postsCollection
             .find({})
-            .sort({[pagination.sortBy]: pagination.sortDirection === 'asc' ? 1 : -1})
+            // .sort({[pagination.sortBy]: pagination.sortDirection === 'asc' ? 1 : -1})
+            .sort({"createdAt": -1})
             .skip(pagination.pageSize * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
