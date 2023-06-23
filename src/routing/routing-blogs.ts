@@ -84,6 +84,7 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
     }
 })
 
+
 routingBlogs.post('/:id/posts', authorizeMiddleware, blogPostMiddleware,
     errorsMessages, async (req: Request, res: Response) => {
         const blogFindForId = await repositoryBlogsDb.findBlogsId(req.params.id)
