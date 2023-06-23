@@ -6,19 +6,19 @@ import {errorsMessages} from "../middleware/errors-messages";
 import {blogPostMiddleware} from "../middleware/post-middleware";
 import {queryRepositoryBlogs} from "../repositories/query-repository-blogs";
 import {repositoryBlogsDb} from "../repositories/repository-blogs-db";
-import {Pagination, PaginationView, SearchQuery, SearchQueryView} from "../setting/types";
+import {PaginatedType, Pagination, PaginationView, SearchQuery, SearchQueryView} from "../setting/types";
 
 
-export const paginatorBlogs = (query: SearchQueryView): PaginationView => {
-
-    return {
-        pageSize: query.pageSize ?? 10,
-        pageNumber: query.pageNumber ?? 1,
-        sortDirection: query.sortDirection ?? 'desc',
-        sortBy: query.sortBy ?? 'createdAt',
-        searchNameTerm: query.searchNameTerm ?? null
-    }
-}
+// export const paginatorBlogs = (query: SearchQueryView): PaginationView => {
+//
+//     return {
+//         pageSize: query.pageSize ?? 10,
+//         pageNumber: query.pageNumber ?? 1,
+//         sortDirection: query.sortDirection ?? 'desc',
+//         sortBy: query.sortBy ?? 'createdAt',
+//         searchNameTerm: query.searchNameTerm ?? null
+//     }
+// }
 
 // export const paginatorBlogs2 = (query: SearchQueryView): PaginationView => {
 //     return {
@@ -69,7 +69,33 @@ export const PaginationDefaultValuesPost = (query: SearchQuery): Pagination => {
     return  defaultValues
 }
 
+export const PaginationDefaultValuesBlog = (query: SearchQueryView): PaginationView => {
 
+    const defaultValues: PaginationView = {
+        pageSize: 10,
+        pageNumber: 1,
+        sortDirection: 'desc',
+        sortBy: 'createdAt',
+        searchNameTerm: null
+    }
+
+    if (query.pageSize && !isNaN(parseInt(query.pageSize, 10)) && parseInt(query.pageSize, 10) >= 1) {
+        defaultValues.pageSize = parseInt(query.pageSize, 10)
+    }
+    if (query.pageNumber && !isNaN(parseInt(query.pageNumber, 10)) && parseInt(query.pageNumber, 10) >= 1) {
+        defaultValues.pageNumber = parseInt(query.pageNumber, 10)
+    }
+    if (query.sortDirection && query.sortDirection === 'asc') {
+        defaultValues.sortDirection = 'asc'
+    }
+    if (query.sortBy) {
+        defaultValues.sortBy = query.sortBy
+    }
+    if(query.searchNameTerm){
+        defaultValues.searchNameTerm = query.searchNameTerm
+    }
+    return  defaultValues
+}
 
 
 
@@ -79,9 +105,9 @@ export const routingBlogs = Router()
 routingBlogs.get('/', async (req: Request<{}, {}, {}, SearchQueryView>,
                              res: Response) => {
 
-        const pagination = paginatorBlogs(req.query)
 
-        const blogsGet = await queryRepositoryBlogs.findBlogs(pagination)
+
+        const blogsGet = await queryRepositoryBlogs.findBlogs(PaginationDefaultValuesBlog(req.query))
         return res.status(200).json(blogsGet)
     }
 )

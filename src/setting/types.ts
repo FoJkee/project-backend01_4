@@ -38,7 +38,7 @@ export type SearchQuery = {
     sortBy?: string
 }
 
-export type SearchQueryView = Pagination & {searchNameTerm? : string | null}
+export type SearchQueryView = SearchQuery & {searchNameTerm? : string | null}
 
 export type Pagination = {
     pageNumber: number,
