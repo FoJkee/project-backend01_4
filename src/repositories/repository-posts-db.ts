@@ -1,5 +1,5 @@
 import {postsCollection} from "../setting/db";
-import {PaginatedType, Pagination, PostType, PostViewType} from "../setting/types";
+import {PaginatedType, Pagination, PostType, PostViewType, SearchQueryView} from "../setting/types";
 import {Filter, ObjectId, WithId} from "mongodb";
 
 
@@ -12,7 +12,7 @@ export const repositoryPostsDb = {
 
         const result = await postsCollection
             .find({})
-            .sort({[pagination.sortBy]: pagination.sortDirection === 'desc' ? 'desc' : 'asc'})
+            .sort({[pagination.sortBy]: pagination.sortDirection === 'desc' ? 1 : -1})
             .skip(pagination.pageSize * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
