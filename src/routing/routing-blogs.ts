@@ -20,15 +20,19 @@ export const paginatorBlogs = (query: SearchQueryView): PaginationView => {
     }
 }
 
-export const paginatorPost = (query: SearchQuery): Pagination => {
-
-    return {
-        pageSize: query.pageSize ?? 10,
-        pageNumber: query.pageNumber ?? 1,
-        sortDirection: query.sortDirection ?? 'desc',
-        sortBy: query.sortBy ?? 'createdAt',
-    }
-}
+// export const paginatorBlogs2 = (query: SearchQueryView): PaginationView => {
+//     return {
+//         pageSize: query.pageSize ?? 10,
+//         pageNumber: query.pageNumber ?? 1,
+//         sortDirection: query.sortDirection ?? 'desc',
+//         sortBy: query.sortBy ?? 'createdAt',
+//         searchNameTerm: query.searchNameTerm ?? null
+//     }
+// }
+//
+// export const paginatorPost = (query: SearchQuery): Pagination => {
+//     return PaginationDefaultValues(query)
+// }
 
 // const blogsQuery = (req: Request, res: Response, next: NextFunction) => {
 //     const pagination = paginator(req.query)
@@ -41,18 +45,44 @@ export const paginatorPost = (query: SearchQuery): Pagination => {
 // }
 
 
+export const PaginationDefaultValuesPost = (query: SearchQuery): Pagination => {
+
+    const defaultValues: Pagination = {
+        pageSize: 10,
+        pageNumber: 1,
+        sortDirection: 'desc',
+        sortBy: 'createdAt',
+    }
+
+    if (query.pageSize && !isNaN(parseInt(query.pageSize, 10)) && parseInt(query.pageSize, 10) >= 1) {
+        defaultValues.pageSize = parseInt(query.pageSize, 10)
+    }
+    if (query.pageNumber && !isNaN(parseInt(query.pageNumber, 10)) && parseInt(query.pageNumber, 10) >= 1) {
+        defaultValues.pageNumber = parseInt(query.pageNumber, 10)
+    }
+    if (query.sortDirection && query.sortDirection === 'asc') {
+        defaultValues.sortDirection = 'asc'
+    }
+    if (query.sortBy) {
+        defaultValues.sortBy = query.sortBy
+    }
+    return  defaultValues
+}
+
+
+
 
 
 
 export const routingBlogs = Router()
 
-routingBlogs.get('/', async (req: Request<{}, {}, {}, SearchQueryView>, res: Response) => {
-
+routingBlogs.get('/', async (req: Request<{}, {}, {}, SearchQueryView>,
+                             res: Response) => {
 
         const pagination = paginatorBlogs(req.query)
 
         const blogsGet = await queryRepositoryBlogs.findBlogs(pagination)
-        res.status(200).json(blogsGet)
+        return res.status(200).json(blogsGet)
     }
 )
 
@@ -77,9 +107,8 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
         res.sendStatus(404)
         return
     }
-    const pagination = paginatorPost(req.query)
 
-    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(pagination, req.params.id)
+    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(PaginationDefaultValuesPost(req.query), req.params.id)
 
     if (blogsFindPost) {
         res.status(200).json(blogsFindPost)

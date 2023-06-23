@@ -3,7 +3,7 @@ import {postService} from "../domain/post-service";
 import {postMiddleware} from "../middleware/post-middleware";
 import {authorizeMiddleware} from "../middleware/authorize";
 import {errorsMessages} from "../middleware/errors-messages";
-import {paginatorPost} from "./routing-blogs";
+import {PaginationDefaultValuesPost} from "./routing-blogs";
 
 
 export const routingPosts = Router()
@@ -11,9 +11,9 @@ export const routingPosts = Router()
 
 routingPosts.get("/", async (req: Request, res: Response) => {
 
-    const postGet = await postService.findPosts(paginatorPost(req.query))
+    const postGet = await postService.findPosts(PaginationDefaultValuesPost(req.query))
 
-    res.status(200).json(postGet)
+    return res.status(200).json(postGet)
 })
 
 routingPosts.post("/", authorizeMiddleware, postMiddleware, errorsMessages, async (req: Request, res: Response) => {

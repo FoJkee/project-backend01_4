@@ -24,7 +24,7 @@ export const queryRepositoryBlogs = {
 
         const result = await blogsCollection
             .find(filter)
-            .sort({[pagination.sortBy ?? "createdAt"]: pagination.sortDirection === 'desc' ? -1 : 1})
+            .sort({[pagination.sortBy]: pagination.sortDirection})
             .skip((pagination.pageSize) * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()

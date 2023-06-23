@@ -32,8 +32,8 @@ export type PaginatedType<T> = {
 }
 
 export type SearchQuery = {
-    pageNumber?: number,
-    pageSize?: number,
+    pageNumber?: string,
+    pageSize?: string,
     sortDirection?: 'asc' | 'desc',
     sortBy?: string
 }

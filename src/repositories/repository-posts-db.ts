@@ -9,10 +9,11 @@ export const repositoryPostsDb = {
 
     async findPosts(pagination: Pagination): Promise<PaginatedType<PostViewType>> {
 
+        const filter: Filter<PostType> = {}
 
         const result = await postsCollection
-            .find({})
-            .sort({[pagination.sortBy ?? "createdAt"]: pagination.sortDirection === 'desc' ? -1 : 1})
+            .find(filter)
+            .sort({[pagination.sortBy]: pagination.sortDirection})
             .skip(pagination.pageSize * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
@@ -28,7 +29,7 @@ export const repositoryPostsDb = {
             createdAt: el.createdAt
         }))
 
-        const totalCount: number = await postsCollection.countDocuments()
+        const totalCount: number = await postsCollection.countDocuments(filter)
 
         const pageCount: number = Math.ceil(totalCount / pagination.pageSize)
 
