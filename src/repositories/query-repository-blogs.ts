@@ -24,7 +24,7 @@ export const queryRepositoryBlogs = {
 
         const result = await blogsCollection
             .find(filter)
-            .sort({[pagination.sortBy ?? "createdAt"]: -1})
+            .sort({[pagination.sortBy ?? "createdAt"]: pagination.sortDirection === 'desc' ? -1 : 1})
             .skip((pagination.pageSize) * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
@@ -94,7 +94,7 @@ export const queryRepositoryBlogs = {
 
         const result = await postsCollection
             .find(filter)
-            .sort({[pagination.sortBy ?? 'createdAt']: -1})
+            .sort({[pagination.sortBy ?? "createdAt"]: pagination.sortDirection === 'desc' ? -1 : 1})
             .skip(pagination.pageSize * (pagination.pageNumber - 1))
             .limit(pagination.pageSize)
             .toArray()
