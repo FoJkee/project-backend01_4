@@ -12,6 +12,7 @@ export const repositoryBlogsDb = {
         const result = await blogsCollection.insertOne(createBlog)
 
         return {
+
             id: result.insertedId.toString(),
             name: createBlog.name,
             description: createBlog.description,
