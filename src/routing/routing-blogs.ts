@@ -44,11 +44,14 @@ export const paginatorPost = (query: SearchQuery): Pagination => {
 export const routingBlogs = Router()
 
 routingBlogs.get('/', async (req: Request<{}, {}, {}, SearchQueryView>, res: Response) => {
-    const pagination = paginatorBlogs(req.query)
 
-    const blogsGet = await queryRepositoryBlogs.findBlogs(pagination)
-    res.status(200).json(blogsGet)
-})
+
+        const pagination = paginatorBlogs(req.query)
+
+        const blogsGet = await queryRepositoryBlogs.findBlogs(pagination)
+        res.status(200).json(blogsGet)
+    }
+)
 
 
 routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages,
@@ -65,6 +68,7 @@ routingBlogs.post('/', authorizeMiddleware, blogsMiddleware, errorsMessages,
 
 
 routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
+
     const blogFindForId = await repositoryBlogsDb.findBlogsId(req.params.id)
     if (!blogFindForId) {
         res.sendStatus(404)
@@ -72,7 +76,7 @@ routingBlogs.get('/:id/posts', async (req: Request, res: Response) => {
     }
     const pagination = paginatorPost(req.query)
 
-    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(pagination)
+    const blogsFindPost = await queryRepositoryBlogs.findPostForBlog(pagination, req.params.id)
 
     if (blogsFindPost) {
         res.status(200).json(blogsFindPost)
@@ -91,13 +95,13 @@ routingBlogs.post('/:id/posts', authorizeMiddleware, blogPostMiddleware,
         const blogsCreatePost = await queryRepositoryBlogs.createPostForBlog(req.body.title,
             req.body.shortDescription, req.body.content, req.params.id)
 
+
         if (blogsCreatePost) {
             res.status(201).json(blogsCreatePost)
             return
         }
 
     })
-
 
 routingBlogs.get('/:id', async (req: Request, res: Response) => {
     const blogsGetId = await blogsService.findBlogsId(req.params.id)

@@ -1,6 +1,6 @@
 import {postsCollection} from "../setting/db";
-import {PaginatedType, Pagination, PostType, PostViewType} from "../setting/types";
-import {ObjectId, WithId} from "mongodb";
+import {BlogType, PaginatedType, Pagination, PostType, PostViewType} from "../setting/types";
+import {Filter, ObjectId, WithId} from "mongodb";
 
 
 
@@ -8,6 +8,8 @@ export const repositoryPostsDb = {
 
 
     async findPosts(pagination: Pagination): Promise<PaginatedType<PostViewType>> {
+
+
 
         const result = await postsCollection
             .find({})
